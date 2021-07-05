@@ -25,8 +25,7 @@ public class DynArray<T> {
         T element;
         if (dyn_array[pos] != null) {
             element = dyn_array[pos];
-        }
-        else {
+        } else {
             throw new Exception("The position you have entered is empty, please try another position!");
         }
         return element;
@@ -44,54 +43,36 @@ public class DynArray<T> {
     }
 
     public void addFirst(T e) {
-        T[] tmp = dyn_array;
-
-        if (size() == capacity()) { // if the array is full, then...
-            extendCapacity();
+        if (size == dyn_array.length) {
+            changeCapacity(dyn_array.length * 2, 0, 1);
         } else {
-            for (int i=0; i<size(); i++) {
-                dyn_array[i+1] = tmp[i];
-            }
-
+            System.arraycopy(dyn_array, 0, dyn_array, 1, size);
         }
+
         dyn_array[0] = e;
+        size++;
+    }
+
+    public void addLast(T e) {
+        if (size == dyn_array.length) {
+            changeCapacity(dyn_array.length * 2, 0, 1);
+        }
+
+        dyn_array[size] = e;
         size++;
 
     }
 
-    public void extendCapacity() {
-        T[] temp = null;
-        if (capacity() == size()) {
-            temp = (T[]) new Object[size*2]; // initialize a double size array of array
-            {
-                for (int i = 0; i<size; i++) {
-                    temp[i] = dyn_array[i];
-                }
-            }
-        }
-        dyn_array = temp;
-        capacity = capacity*2;
+    private void changeCapacity(int capacity) {
+        changeCapacity(capacity, 0, 0);
+    }
+
+
+    private void changeCapacity(int capacity, int readOffset, int writeOffset) {
+        T[] newContent = (T[]) new Object[capacity];
+
+        System.arraycopy(dyn_array, readOffset, newContent, writeOffset, size);
+
+        dyn_array = newContent;
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
