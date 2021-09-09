@@ -3,7 +3,7 @@ import java.util.Arrays;
 public class Dyn_Main {
 
 
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args) {
         DynArray x = new DynArray();
         //System.out.println(x.set(0, 6));
         System.out.println(x.size());
@@ -22,16 +22,33 @@ public class Dyn_Main {
         System.out.println(x.size());
         System.out.println(x.capacity());
         System.out.println(Arrays.toString(x.dyn_array));
+
+        //System.out.println(x.set(3, 6));
+        //System.out.println(x.size());
+        //System.out.println(x.capacity());
         //x.addLast(7);
         //x.addLast("erz1");
         //x.addLast("erz2");
         //x.addLast("erz3");
         //x.addLast("erz4");
-        //x.addLast("erz5");
-        //x.addLast("erz6");
+        x.addLast("erz5");
+        x.addLast("erz6");
         //x.addFirst("erz7");
-        //x.addFirst("erz8");
-
         System.out.println(Arrays.toString(x.dyn_array));
+        System.out.println(x.removeLast());
+        System.out.println(Arrays.toString(x.dyn_array));
+        System.out.println(x.removeLast());
+        System.out.println(Arrays.toString(x.dyn_array));
+        System.out.println(x.removeLast());
+        System.out.println(Arrays.toString(x.dyn_array));
+        System.out.println(x.removeLast());
+        System.out.println(Arrays.toString(x.dyn_array));
+        System.out.println(x.removeLast());
+        System.out.println(Arrays.toString(x.dyn_array));
+
+
+
+
     }
+
 }
