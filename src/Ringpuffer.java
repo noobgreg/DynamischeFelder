@@ -1,9 +1,10 @@
 import java.nio.BufferOverflowException;
+import java.util.NoSuchElementException;
 
 public class Ringpuffer<T> {
 
     int size = 0; // initializing size variable for the ringpuffer
-    T[] array = null; // array that is implemented as a ringpuffer
+    T[] array; // array that is implemented as a ringpuffer
     int first = 0;
     int last = 0;
 
@@ -47,6 +48,21 @@ public class Ringpuffer<T> {
 
         array[first] = e;
         size++;
+    }
+    public T removeFirst() {
+        if (size == 0) {
+            throw new NoSuchElementException();
+        }
+        T temp = array[first];
+        array[first] = null;
+        size--;
+        first++;
+        first = first % array.length;
+
+        if (size == 0) {
+            first = last = -1;
+        }
+        return temp;
     }
 
     public void addLast(T e) throws Exception {
