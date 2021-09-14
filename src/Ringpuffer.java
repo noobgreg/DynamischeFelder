@@ -1,54 +1,59 @@
+import java.nio.BufferOverflowException;
+
 public class Ringpuffer<T> {
 
     int size = 0; // initializing size variable for the ringpuffer
-    T[] content = null; // array that is implemented as a ringpuffer
+    T[] array = null; // array that is implemented as a ringpuffer
     int first = 0;
     int last = 0;
 
-// constructor that creates an array of the given capacity
+// Konstruktor, der ein array der Größe erstellt welches übergeben wird
     public Ringpuffer(int capacity) {
-        content = (T[]) new Object[capacity];
+        array = (T[]) new Object[capacity]; // Erstellung des Arrays der übergebenen Größe
     }
 
-// method that returns the size of the array
-    public int size() {
+    public int size() { // Methode, die die Größe des arrays zurückgibt
         return size;
     }
 
-// method that returns the element at a specific position otherwise throws exception
-    public T get(int pos) {
-        // if input pos is bigger than the capacity and there is no content at the pos then throw exception
-        if (pos >= content.length || content[pos] == null) {
+    public T get(int pos) { // Methode, die das Element an der übergebenen Position liefert
+        if (pos >= array.length) {// exception, falls pos größer oder gleich der max array kapazität ist
             throw new ArrayIndexOutOfBoundsException();
         }
-        return content[pos]; // if everything is correct return the value at the given position
+        else if (array[pos] == null) {// exception, wenn das angefragte Objekt nicht  belegt ist
+            throw new NullPointerException();
+        }
+        return array[pos]; // wenn keine exception geworfen wird, dann gebe das element an der pos zurück
+
     }
 
-    public T set(int pos, T e) {
-        if (pos >= content.length || pos == 0) {
+    public T set(int pos, T e) { // methode, die das übergebene objekt an pos einfügt und das alte zurück gibt
+        if (pos >= array.length ) { // exception, falls pos größer oder gleich der max array kapazität ist
             throw new ArrayIndexOutOfBoundsException();
         }
-        else if (content[pos] == null) {
+        else if (array[pos] == null) { // exception, falls das element an der pos nicht belegt ist
             throw new NullPointerException();
         }
 
-        T old = content[pos];
-        content[pos] = e;
-        return old;
+        T old = array[pos]; // speichere das alte Element in einer Variable
+        array[pos] = e; // überschreibe das alte Element mit dem neuen Element
+        return old; // gib das alte Element zurück
     }
-    public void addFirst(T e) throws Exception {
-        if (content[first] != null) {
-            throw new Exception("First element full!");
+
+    public void addFirst(T e) { // Methode, die ein Element an erster Stelle einfügen sollte.
+        if (size == array.length) {
+            throw new BufferOverflowException();
         }
-        content[first] = e;
+
+        array[first] = e;
         size++;
     }
 
     public void addLast(T e) throws Exception {
-        if (content[first] != null) {
+        if (array[first] != null) {
             throw new Exception("First element full!");
         }
-        content[last] = e;
+        array[last] = e;
     }
 
 }
