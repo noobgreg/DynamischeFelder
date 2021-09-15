@@ -1,4 +1,5 @@
 import java.nio.BufferOverflowException;
+import java.nio.BufferUnderflowException;
 import java.util.NoSuchElementException;
 
 public class Ringpuffer<T> {
@@ -6,11 +7,15 @@ public class Ringpuffer<T> {
     int size = 0; // initializing size variable for the ringpuffer
     T[] array; // array that is implemented as a ringpuffer
     int first = 0;
-    int last = 0;
+    int last = -1;
 
 // Konstruktor, der ein array der Größe erstellt welches übergeben wird
     public Ringpuffer(int capacity) {
+        if(capacity < 0) {
+            throw new IllegalArgumentException();
+        }
         array = (T[]) new Object[capacity]; // Erstellung des Arrays der übergebenen Größe
+
     }
 
     public int size() { // Methode, die die Größe des arrays zurückgibt
@@ -28,48 +33,83 @@ public class Ringpuffer<T> {
 
     }
 
-    public T set(int pos, T e) { // methode, die das übergebene objekt an pos einfügt und das alte zurück gibt
-        if (pos >= array.length ) { // exception, falls pos größer oder gleich der max array kapazität ist
-            throw new ArrayIndexOutOfBoundsException();
-        }
-        else if (array[pos] == null) { // exception, falls das element an der pos nicht belegt ist
-            throw new NullPointerException();
-        }
+    public T set(int pos, T e) { // methode, die das übergebene objekt an pos einfügt und das alte zurückgibt
+        if(!(0 <= pos && pos < size)) throw new ArrayIndexOutOfBoundsException(); // exception, wenn übergebene position außerhalb der array größe liegt
 
-        T old = array[pos]; // speichere das alte Element in einer Variable
-        array[pos] = e; // überschreibe das alte Element mit dem neuen Element
-        return old; // gib das alte Element zurück
+        int index = getIndex(pos); // liefert ein aktualisiertes index
+
+        T old = array[index]; // speichert den alten wert, der gleich überschrieben wird
+
+        array[index] = e; // setz das übergebene element an der gewünschten pos ein
+
+        return old; // gibt den alten wert zurück
     }
 
     public void addFirst(T e) { // Methode, die ein Element an erster Stelle einfügen sollte.
-        if (size == array.length) {
+        if (size == array.length) { // exception, wenn das array voll ist
+            throw new BufferOverflowException();
+        }
+        first = offsetFromCursor(first, -1); // berechnet den abstand vom zeiger, wo das element an erster stelle eingefügt werden kann
+
+        array[first] = e; // füge das neue element an erster Stelle ein
+        size++; // erhöhe die anzahl der elemente im array
+    }
+    public T removeFirst() { // methode, die das erste element entfernt
+        if (size == 0) { // wenn size 0 ist, dann gibt es kein element zu entfernen
+            throw new BufferUnderflowException();
+        }
+        T removed = array[first]; // speichere das erste element
+        array[first] = null; // setze die erste pos gleich 0
+
+        first = offsetFromCursor(first, 1); // berechne first neu
+        size--; // reduziere die anzahl der elemente im array um eins
+
+        return removed; // gebe das entfernte element zurück
+    }
+
+    public void addLast(T e) { // füge an letzter Stelle ein element ein
+        if(size == array.length) { // exception, wenn das array voll ist
             throw new BufferOverflowException();
         }
 
-        array[first] = e;
-        size++;
-    }
-    public T removeFirst() {
-        if (size == 0) {
-            throw new NoSuchElementException();
-        }
-        T temp = array[first];
-        array[first] = null;
-        size--;
-        first++;
-        first = first % array.length;
+        last = offsetFromCursor(last, 1); // berechne "last" neu
+        array[last] = e; // füge das neue element an der letzten Stelle im array ein
 
-        if (size == 0) {
-            first = last = -1;
+        size++; // erhöhe die anzahl der elemente im array um eins
+    }
+    public T removeLast() { // methode, die das letzte element entfernt
+        if(size == 0) { // wenn size 0 ist, dann gibt es nichts zu entfernen
+            throw new BufferUnderflowException();
         }
-        return temp;
+
+        T removed = array[last]; // speichere das letzte element
+
+        last = offsetFromCursor(last, -1); // berechne "last" neu
+        size--; // reduziere die anzahl der elemente im array um eins
+
+        return removed; // gebe das entfernte element zurück
     }
 
-    public void addLast(T e) throws Exception {
-        if (array[first] != null) {
-            throw new Exception("First element full!");
+    public int getIndex(int pos) { // Helper-Methode
+        return offsetFromCursor(first, pos);
+    }
+
+    public int offsetFromCursor(int cursor, int offset) { // Helper-Methode
+        return (cursor + offset + array.length) % array.length;
+    }
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder("[");
+
+        for(int i = 0; i < array.length; i++) {
+            if(i != 0) sb.append(", ");
+            if(i == first) sb.append("s");
+            if(i == last) sb.append("e");
+
+            sb.append(array[i]);
         }
-        array[last] = e;
+
+        return sb.append("]").toString();
     }
 
 }
