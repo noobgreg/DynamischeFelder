@@ -11,18 +11,13 @@ public class rp_main {
 
 
         System.out.println(Arrays.toString(rp.array));
-        rp.addLast(2);
+        rp.addFirst(2);
         System.out.println(Arrays.toString(rp.array));
-        rp.addLast(4);
+        rp.addFirst(4);
         System.out.println(Arrays.toString(rp.array));
-        rp.addLast(6);
+        rp.addFirst(6);
         System.out.println(Arrays.toString(rp.array));
-        System.out.println(rp.removeLast());
-        System.out.println(Arrays.toString(rp.array));
-        System.out.println(rp.removeLast());
-        System.out.println(Arrays.toString(rp.array));
-        System.out.println(rp.removeLast());
-        System.out.println(Arrays.toString(rp.array));
+
 
 
 

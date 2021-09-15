@@ -49,7 +49,7 @@ public class Ringpuffer<T> {
         return old; // gibt den alten wert zurück
     }
     /**
-     *geprüft: funzt noch nicht so wie gewünscht
+     *geprüft
      */
     public void addFirst(T e) { // Methode, die ein Element an erster Stelle einfügen sollte.
         if (size == array.length) { // exception, wenn das array voll ist
