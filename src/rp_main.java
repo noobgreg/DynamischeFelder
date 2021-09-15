@@ -5,18 +5,26 @@ public class rp_main {
     public static void main(String[] args) {
 
 
-        Ringpuffer rp = new Ringpuffer(5);
+        Ringpuffer rp = new Ringpuffer(8);
         System.out.println(rp.first);
         System.out.println(rp.array.length);
 
 
         System.out.println(Arrays.toString(rp.array));
-        rp.addFirst(2);
+        rp.addLast(2);
         System.out.println(Arrays.toString(rp.array));
-        rp.addFirst(4);
+        rp.addLast(4);
         System.out.println(Arrays.toString(rp.array));
-        rp.addFirst(6);
+        rp.addLast(6);
         System.out.println(Arrays.toString(rp.array));
+        System.out.println(rp.removeLast());
+        System.out.println(Arrays.toString(rp.array));
+        System.out.println(rp.removeLast());
+        System.out.println(Arrays.toString(rp.array));
+        System.out.println(rp.removeLast());
+        System.out.println(Arrays.toString(rp.array));
+
+
 
 
 
